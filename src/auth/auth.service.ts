@@ -17,7 +17,6 @@ export class AuthService {
 
   async login(body, res) {
     try {
-      console.log("entering logoin", body)
       const { email, password, provider, code } = body;
 
       let user: any;
@@ -52,13 +51,11 @@ export class AuthService {
           const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, callbackURL);
 
           const { tokens } = await oauth2Client.getToken(code);
-          console.log("Tokens from Google -> ",tokens)
           oauth2Client.setCredentials(tokens);
 
           const userRes = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${tokens.access_token}`);
 
           const payload = await userRes.json();
-          console.log("Payload from Google -> ",payload)
 
           const { email: verifiedEmail, name: verifiedName, picture: verifiedPic, id: googleId } = payload;
 
